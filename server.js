@@ -122,33 +122,38 @@ function getRoomInfo(room) {
    PARTIAL MATCH: compare guess vs answer
    =========================================== */
 function partialMatch(guess, answer) {
-  // Returns array of { char, correct } for each character
-  const result = [];
+  // Compare char by char, return array of { char, status }
+  // status: 'exact' | 'present' | 'absent'
   const answerChars = [...answer];
   const guessChars = [...guess];
-  const used = new Array(answerChars.length).fill(false);
+  const result = [];
+  const answerUsed = new Array(answerChars.length).fill(false);
+  const guessUsed = new Array(guessChars.length).fill(false);
 
-  // First pass: exact matches
+  // Pass 1: exact position matches
   for (let i = 0; i < guessChars.length; i++) {
     if (i < answerChars.length && guessChars[i] === answerChars[i]) {
-      result.push({ char: guessChars[i], correct: true });
-      used[i] = true;
-    } else {
-      result.push({ char: guessChars[i], correct: false });
+      result[i] = { char: guessChars[i], status: 'exact' };
+      answerUsed[i] = true;
+      guessUsed[i] = true;
     }
   }
 
-  // Second pass: correct char in wrong position
-  for (let i = 0; i < result.length; i++) {
-    if (result[i].correct) continue;
-    const gChar = result[i].char;
+  // Pass 2: correct char in wrong position
+  for (let i = 0; i < guessChars.length; i++) {
+    if (guessUsed[i]) continue;
+    const gChar = guessChars[i];
+    let found = false;
     for (let j = 0; j < answerChars.length; j++) {
-      if (!used[j] && answerChars[j] === gChar) {
-        result[i].correct = false; // still wrong position, but mark it
-        result[i].present = true;  // exists in answer
-        used[j] = true;
+      if (!answerUsed[j] && answerChars[j] === gChar) {
+        result[i] = { char: gChar, status: 'present' };
+        answerUsed[j] = true;
+        found = true;
         break;
       }
+    }
+    if (!found) {
+      result[i] = { char: gChar, status: 'absent' };
     }
   }
 
@@ -156,11 +161,8 @@ function partialMatch(guess, answer) {
 }
 
 function formatPartial(match) {
-  return match.map(m => {
-    if (m.correct) return m.char;
-    if (m.present) return m.char; // same char but wrong position - still show it
-    return '*';
-  }).join('');
+  // Returns display string: exact chars shown, others as *
+  return match.map(m => m.status === 'exact' ? m.char : '*').join('');
 }
 
 /* ===========================================
@@ -338,7 +340,6 @@ io.on('connection', (socket) => {
     } else {
       // Wrong - compute partial match
       const match = partialMatch(trimmed, room.currentWord.word);
-      const display = formatPartial(match);
 
       // Track wrong guesses
       if (!room.wrongGuesses[guesser.id]) room.wrongGuesses[guesser.id] = 0;
@@ -349,15 +350,13 @@ io.on('connection', (socket) => {
       // Determine hint to give
       let hint = null;
       if (totalWrong >= 6) {
-        // Give category hint
         hint = `💡 提示：这个词属于「${room.currentWord.cat}」类`;
       } else if (totalWrong >= 3) {
-        // Give length/detail hint
         hint = `💡 提示：这个词有 ${room.currentWord.word.length} 个字`;
       }
 
       io.to(room.code).emit('game:wrong-guess', {
-        name: guesser.name, guess: trimmed, display, hint,
+        name: guesser.name, guess: trimmed, match, hint,
       });
     }
   });

@@ -2,14 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>你画我猜 - 在线多人</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #16213e; --card: #1e2a45;
-            --accent: #ff6b6b; --accent2: #4ecdc4; --gold: #ffd93d; --purple: #a29bfe;
+            --accent: #ff6b6b; --accent2: #4ecdc4; --gold: #ffd93d;
             --text: #eaeaea; --text-dim: #6b7a8d; --border: #2a3a5a;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -18,14 +18,14 @@
         .screen.active { display: flex; }
 
         /* LOBBY */
-        #lobby { flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+        #lobby { flex-direction: column; align-items: center; justify-content: center; gap: 28px; padding: 20px;
             background: radial-gradient(ellipse at 30% 20%, rgba(78,205,196,0.08) 0%, transparent 50%),
                         radial-gradient(ellipse at 70% 80%, rgba(255,107,107,0.08) 0%, transparent 50%), var(--bg); }
-        .lobby-title { font-size: 56px; font-weight: 900; text-align: center; }
+        .lobby-title { font-size: 48px; font-weight: 900; text-align: center; }
         .lobby-title .g1 { background: linear-gradient(135deg, var(--accent), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .lobby-title .g2 { font-size: 18px; font-weight: 400; color: var(--text-dim); -webkit-text-fill-color: initial; margin-top: 6px; }
-        .lobby-emoji { font-size: 72px; animation: bounce 2s ease-in-out infinite; }
-        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
+        .lobby-title .g2 { font-size: 16px; font-weight: 400; color: var(--text-dim); -webkit-text-fill-color: initial; margin-top: 4px; }
+        .lobby-emoji { font-size: 60px; animation: bounce 2s ease-in-out infinite; }
+        @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
         .name-row { display: flex; gap: 12px; align-items: center; }
         .name-row input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; color: var(--text); font-size: 16px; font-family: inherit; width: 240px; outline: none; text-align: center; }
         .name-row input:focus { border-color: var(--accent2); }
@@ -33,126 +33,148 @@
         .btn-primary { background: var(--accent2); color: var(--bg); }
         .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border) !important; }
-        .btn-secondary:hover { border-color: var(--accent2) !important; }
-        .join-row { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+        .join-row { display: flex; gap: 10px; align-items: center; margin-top: 4px; }
         .join-row input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--text); font-size: 20px; font-family: inherit; width: 160px; outline: none; text-align: center; letter-spacing: 6px; text-transform: uppercase; }
-        .join-row input:focus { border-color: var(--accent2); }
         .or-text { color: var(--text-dim); font-size: 14px; }
-        .error-msg { color: var(--accent); font-size: 13px; margin-top: 8px; text-align: center; }
+        .error-msg { color: var(--accent); font-size: 13px; margin-top: 4px; text-align: center; }
 
         /* WAITING */
-        #waiting { flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+        #waiting { flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 20px; }
         .room-code-box { text-align: center; }
         .room-code-box .label { font-size: 14px; color: var(--text-dim); margin-bottom: 8px; }
-        .room-code { font-size: 56px; font-weight: 900; letter-spacing: 12px; background: linear-gradient(135deg, var(--accent2), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .room-code-box .hint { font-size: 12px; color: var(--text-dim); margin-top: 6px; }
-        .players-grid { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 600px; }
-        .player-slot { background: var(--surface); border: 2px solid var(--border); border-radius: 12px; padding: 16px 28px; text-align: center; min-width: 140px; transition: all 0.3s; }
+        .room-code { font-size: 48px; font-weight: 900; letter-spacing: 10px; background: linear-gradient(135deg, var(--accent2), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .room-code-box .hint { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+        .players-grid { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 500px; }
+        .player-slot { background: var(--surface); border: 2px solid var(--border); border-radius: 12px; padding: 14px 22px; text-align: center; min-width: 120px; }
         .player-slot.filled { border-color: var(--accent2); }
-        .player-slot .avatar { font-size: 32px; margin-bottom: 6px; }
-        .player-slot .pname { font-size: 14px; font-weight: 700; }
-        .player-slot .host-badge { display: inline-block; font-size: 10px; background: var(--gold); color: var(--bg); padding: 2px 6px; border-radius: 4px; margin-top: 4px; font-weight: 700; }
+        .player-slot .avatar { font-size: 28px; margin-bottom: 4px; }
+        .player-slot .pname { font-size: 13px; font-weight: 700; }
+        .player-slot .host-badge { display: inline-block; font-size: 10px; background: var(--gold); color: var(--bg); padding: 2px 6px; border-radius: 4px; margin-top: 3px; font-weight: 700; }
         .player-slot.empty { border-style: dashed; opacity: 0.4; }
-        .player-slot.empty .pname { color: var(--text-dim); }
-        .waiting-msg { font-size: 14px; color: var(--text-dim); text-align: center; }
-        .settings-row { display: flex; gap: 20px; align-items: center; }
+        .waiting-msg { font-size: 13px; color: var(--text-dim); text-align: center; }
+        .settings-row { display: flex; gap: 16px; align-items: center; }
         .setting-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-dim); }
         .setting-item select { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; font-size: 13px; font-family: inherit; outline: none; }
 
-        /* GAME */
-        #game { flex-direction: column; height: 100vh; }
-        .game-topbar { display: flex; align-items: center; padding: 8px 20px; background: var(--surface); border-bottom: 1px solid var(--border); gap: 16px; flex-shrink: 0; }
-        .game-logo { font-size: 16px; font-weight: 700; color: var(--accent); white-space: nowrap; }
-        .round-info { font-size: 13px; color: var(--text-dim); }
-        .round-info strong { color: var(--text); }
-        .timer-display { font-size: 28px; font-weight: 900; min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; }
+        /* GAME - responsive layout */
+        #game { flex-direction: column; height: 100vh; height: 100dvh; }
+        .game-topbar { display: flex; align-items: center; padding: 6px 16px; background: var(--surface); border-bottom: 1px solid var(--border); gap: 10px; flex-shrink: 0; }
+        .game-logo { font-size: 14px; font-weight: 700; color: var(--accent); white-space: nowrap; }
+        .round-info { font-size: 12px; color: var(--text-dim); }
+        .timer-display { font-size: 24px; font-weight: 900; min-width: 40px; text-align: center; font-variant-numeric: tabular-nums; }
         .timer-display.warning { color: var(--gold); }
         .timer-display.danger { color: var(--accent); animation: pulse 0.5s ease-in-out infinite; }
         @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
-        .scoreboard { display: flex; gap: 16px; margin-left: auto; }
-        .score-item { display: flex; align-items: center; gap: 6px; font-size: 13px; }
-        .score-item .pts { font-size: 18px; font-weight: 900; }
+        .scoreboard { display: flex; gap: 12px; margin-left: auto; }
+        .score-item { display: flex; align-items: center; gap: 4px; font-size: 12px; }
+        .score-item .pts { font-size: 16px; font-weight: 900; }
         .score-item.me .pts { color: var(--accent2); }
 
-        .game-body { display: flex; flex: 1; overflow: hidden; }
-        .draw-area { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; }
-        .word-display { text-align: center; }
-        .word-display .role { font-size: 14px; color: var(--text-dim); }
-        .word-display .word { font-size: 32px; font-weight: 900; color: var(--gold); letter-spacing: 8px; font-family: 'Ma Shan Zheng', cursive; }
-        .word-display .cat-tag { display: inline-block; font-size: 12px; background: rgba(255,217,61,0.15); color: var(--gold); padding: 2px 10px; border-radius: 10px; margin-top: 4px; }
-        .word-display .hint { font-size: 14px; color: var(--accent2); }
-        .word-display .dashes { font-size: 28px; letter-spacing: 8px; color: var(--accent2); font-weight: 700; }
+        .game-body { display: flex; flex: 1; overflow: hidden; min-height: 0; }
 
-        .canvas-frame { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3); position: relative; }
-        #drawCanvas { display: block; cursor: crosshair; }
+        .draw-area { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 10px; min-width: 0; }
+        .word-display { text-align: center; flex-shrink: 0; }
+        .word-display .role { font-size: 13px; color: var(--text-dim); }
+        .word-display .word { font-size: 28px; font-weight: 900; color: var(--gold); letter-spacing: 6px; font-family: 'Ma Shan Zheng', cursive; }
+        .word-display .cat-tag { display: inline-block; font-size: 11px; background: rgba(255,217,61,0.15); color: var(--gold); padding: 2px 8px; border-radius: 8px; margin-top: 2px; }
+        .word-display .hint { font-size: 13px; color: var(--accent2); }
+        .word-display .dashes { font-size: 24px; letter-spacing: 6px; color: var(--accent2); font-weight: 700; }
 
-        .draw-tools { display: flex; gap: 5px; align-items: center; padding: 6px 12px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); position: relative; }
-        .tool-btn { width: 30px; height: 30px; background: transparent; border: 2px solid transparent; border-radius: 5px; color: var(--text-dim); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+        .canvas-frame { background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 16px rgba(0,0,0,0.3); position: relative; flex-shrink: 1; min-width: 0; min-height: 0; }
+        #drawCanvas { display: block; cursor: crosshair; width: 100%; height: auto; aspect-ratio: 1; max-height: calc(100dvh - 220px); }
+
+        .draw-tools { display: flex; gap: 4px; align-items: center; padding: 5px 10px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); position: relative; flex-shrink: 0; flex-wrap: wrap; justify-content: center; }
+        .tool-btn { width: 28px; height: 28px; background: transparent; border: 2px solid transparent; border-radius: 5px; color: var(--text-dim); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
         .tool-btn:hover { color: var(--text); background: var(--surface2); }
         .tool-btn.active { color: var(--accent2); border-color: var(--accent2); background: rgba(78,205,196,0.1); }
-        .tool-divider { width: 1px; height: 20px; background: var(--border); }
-        .color-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; transition: transform 0.1s; }
-        .color-dot:hover { transform: scale(1.2); }
-        .eraser-btn { width: 30px; height: 30px; background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; color: var(--text-dim); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .tool-divider { width: 1px; height: 18px; background: var(--border); }
+        .color-dot { width: 20px; height: 20px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; }
+        .eraser-btn { width: 28px; height: 28px; background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; color: var(--text-dim); font-size: 12px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .eraser-btn.active { border-color: var(--accent); color: var(--accent); }
-        .clear-btn, .skip-btn { background: transparent; border: 1px solid var(--border); border-radius: 5px; color: var(--text-dim); font-size: 11px; padding: 5px 10px; cursor: pointer; font-family: inherit; }
+        .clear-btn, .skip-btn { background: transparent; border: 1px solid var(--border); border-radius: 5px; color: var(--text-dim); font-size: 11px; padding: 4px 8px; cursor: pointer; font-family: inherit; }
         .clear-btn:hover { border-color: var(--accent); color: var(--accent); }
         .skip-btn { border-color: var(--accent); color: var(--accent); }
 
-        .color-popup { display: none; position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+        .color-popup { display: none; position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 6px; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
         .color-popup.show { display: block; }
         .color-popup .grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; }
-        .color-popup .sw { width: 22px; height: 22px; border-radius: 3px; border: 2px solid transparent; cursor: pointer; transition: transform 0.1s; }
+        .color-popup .sw { width: 20px; height: 20px; border-radius: 3px; border: 2px solid transparent; cursor: pointer; }
         .color-popup .sw:hover { transform: scale(1.2); }
 
-        .game-sidebar { width: 300px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
-        .sidebar-header { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; }
-        .chat-area { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
-        .chat-msg { padding: 6px 10px; border-radius: 6px; font-size: 12px; line-height: 1.5; animation: fadeIn 0.2s ease; word-break: break-all; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
-        .chat-msg.system { background: rgba(78,205,196,0.08); color: var(--accent2); text-align: center; font-size: 11px; }
-        .chat-msg.correct { background: rgba(78,205,196,0.15); color: var(--accent2); text-align: center; font-weight: 700; font-size: 14px; }
+        /* SIDEBAR - collapsible on mobile */
+        .game-sidebar { width: 280px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-header { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-toggle { display: none; background: var(--accent2); color: var(--bg); border: none; border-radius: 4px; padding: 2px 8px; font-size: 11px; cursor: pointer; font-family: inherit; }
+        .chat-area { flex: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 3px; }
+        .chat-msg { padding: 5px 8px; border-radius: 5px; font-size: 11px; line-height: 1.4; animation: fadeIn 0.2s ease; word-break: break-word; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:translateY(0)} }
+        .chat-msg.system { background: rgba(78,205,196,0.08); color: var(--accent2); text-align: center; font-size: 10px; }
+        .chat-msg.correct { background: rgba(78,205,196,0.15); color: var(--accent2); text-align: center; font-weight: 700; font-size: 13px; }
         .chat-msg.guess-msg { background: rgba(255,255,255,0.03); }
-        .chat-msg.guess-msg .partial { font-family: monospace; font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 2px; }
-        .chat-msg.guess-msg .partial .hit { color: var(--accent2); }
-        .chat-msg.guess-msg .partial .miss { color: var(--text-dim); }
+        .chat-msg.guess-msg .match-display { font-family: monospace; font-size: 13px; font-weight: 700; letter-spacing: 2px; }
+        .chat-msg.guess-msg .match-display .exact { color: var(--accent2); }
+        .chat-msg.guess-msg .match-display .present { color: var(--gold); }
+        .chat-msg.guess-msg .match-display .absent { color: var(--text-dim); }
         .chat-msg.hint-msg { background: rgba(255,217,61,0.1); color: var(--gold); text-align: center; font-weight: 500; }
-        .chat-msg .ptag { font-weight: 700; margin-right: 4px; }
+        .chat-msg .ptag { font-weight: 700; margin-right: 3px; }
         .chat-msg .ptag.me { color: var(--accent2); }
         .chat-msg .ptag.other { color: var(--accent); }
 
-        .guess-area { padding: 10px; border-top: 1px solid var(--border); }
-        .guess-row { display: flex; gap: 6px; }
-        .guess-row input { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; }
+        .guess-area { padding: 8px; border-top: 1px solid var(--border); }
+        .guess-row { display: flex; gap: 5px; }
+        .guess-row input { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; min-width: 0; }
         .guess-row input:focus { border-color: var(--accent2); }
-        .guess-row button { background: var(--accent2); color: var(--bg); border: none; border-radius: 6px; padding: 8px 16px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
-        .guess-row button:disabled { background: var(--border); color: var(--text-dim); cursor: not-allowed; }
+        .guess-row button { background: var(--accent2); color: var(--bg); border: none; border-radius: 6px; padding: 8px 14px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; flex-shrink: 0; }
+        .guess-row button:disabled { background: var(--border); color: var(--text-dim); }
+
+        /* MOBILE: sidebar becomes bottom sheet */
+        @media (max-width: 768px) {
+            .game-body { flex-direction: column; }
+            .draw-area { flex: none; padding: 6px; gap: 4px; }
+            .word-display .word { font-size: 20px; }
+            .word-display .dashes { font-size: 18px; }
+            #drawCanvas { max-height: 45dvh; }
+            .draw-tools { gap: 3px; padding: 4px 8px; }
+            .draw-tools .tool-btn, .draw-tools .eraser-btn { width: 26px; height: 26px; font-size: 12px; }
+            .game-sidebar { width: 100%; height: 200px; border-left: none; border-top: 1px solid var(--border); flex-shrink: 0; }
+            .game-sidebar.collapsed { height: 36px; overflow: hidden; }
+            .game-sidebar.collapsed .chat-area, .game-sidebar.collapsed .guess-area { display: none; }
+            .sidebar-toggle { display: inline-block; }
+            .chat-area { padding: 6px; }
+            .chat-msg { font-size: 11px; padding: 4px 6px; }
+            .guess-area { padding: 6px; }
+            .guess-row input { font-size: 16px; padding: 10px; } /* prevent iOS zoom */
+            .lobby-title { font-size: 36px; }
+            .lobby-emoji { font-size: 48px; }
+            .room-code { font-size: 36px; letter-spacing: 8px; }
+            .timer-display { font-size: 20px; }
+            .game-logo { font-size: 12px; }
+        }
 
         /* TRANSITION */
-        #transition { flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
-        .trans-emoji { font-size: 56px; }
-        .trans-text { font-size: 32px; font-weight: 900; }
-        .trans-sub { font-size: 15px; color: var(--text-dim); }
+        #transition { flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+        .trans-emoji { font-size: 48px; }
+        .trans-text { font-size: 28px; font-weight: 900; }
+        .trans-sub { font-size: 14px; color: var(--text-dim); text-align: center; }
 
         /* RESULTS */
-        #results { flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+        #results { flex-direction: column; align-items: center; justify-content: center; gap: 24px; padding: 20px;
             background: radial-gradient(ellipse at 50% 30%, rgba(255,217,61,0.08) 0%, transparent 60%), var(--bg); }
-        .res-trophy { font-size: 72px; animation: bounce 2s ease-in-out infinite; }
-        .res-title { font-size: 42px; font-weight: 900; }
-        .res-list { display: flex; flex-direction: column; gap: 12px; min-width: 300px; }
-        .res-row { display: flex; align-items: center; gap: 16px; padding: 14px 20px; background: var(--surface); border-radius: 10px; border: 1px solid var(--border); }
+        .res-trophy { font-size: 60px; animation: bounce 2s ease-in-out infinite; }
+        .res-title { font-size: 36px; font-weight: 900; }
+        .res-list { display: flex; flex-direction: column; gap: 10px; min-width: 280px; width: 100%; max-width: 400px; }
+        .res-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--surface); border-radius: 10px; border: 1px solid var(--border); }
         .res-row.winner { border-color: var(--gold); background: rgba(255,217,61,0.05); }
-        .res-rank { font-size: 24px; font-weight: 900; width: 36px; }
+        .res-rank { font-size: 20px; font-weight: 900; width: 32px; }
         .res-rank.r1 { color: var(--gold); }
-        .res-rank.r2 { color: var(--text-dim); }
-        .res-name { flex: 1; font-weight: 700; }
-        .res-score { font-size: 24px; font-weight: 900; color: var(--accent2); }
+        .res-name { flex: 1; font-weight: 700; font-size: 14px; }
+        .res-score { font-size: 20px; font-weight: 900; color: var(--accent2); }
 
-        .watch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+        .watch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 50; flex-direction: column; align-items: center; justify-content: center; gap: 12px; }
         .watch-overlay.show { display: flex; }
-        .watch-overlay .emoji { font-size: 48px; }
-        .watch-overlay .text { font-size: 24px; font-weight: 700; }
-        .watch-overlay .sub { font-size: 14px; color: var(--text-dim); text-align: center; line-height: 1.6; }
+        .watch-overlay .emoji { font-size: 40px; }
+        .watch-overlay .text { font-size: 22px; font-weight: 700; }
+        .watch-overlay .sub { font-size: 13px; color: var(--text-dim); text-align: center; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -196,11 +218,14 @@
     <div class="game-body">
         <div class="draw-area">
             <div class="word-display" id="gWordDisplay"></div>
-            <div class="canvas-frame"><canvas id="drawCanvas"></canvas></div>
+            <div class="canvas-frame"><canvas id="drawCanvas" width="560" height="560"></canvas></div>
             <div class="draw-tools" id="gTools"></div>
         </div>
-        <div class="game-sidebar">
-            <div class="sidebar-header">💬 猜题记录</div>
+        <div class="game-sidebar" id="gameSidebar">
+            <div class="sidebar-header">
+                <span>💬 猜题记录</span>
+                <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()">收起</button>
+            </div>
             <div class="chat-area" id="gChat"></div>
             <div class="guess-area" id="gGuessArea">
                 <div class="guess-row">
@@ -227,7 +252,7 @@
 
 <div class="watch-overlay" id="watchOverlay">
     <div class="emoji">👀</div>
-    <div class="text" id="watchText">请等待下一位画手...</div>
+    <div class="text" id="watchText"></div>
     <div class="sub" id="watchSub"></div>
 </div>
 
@@ -245,6 +270,14 @@ const COLORS = [
 ];
 
 function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+/* ===== SIDEBAR TOGGLE (mobile) ===== */
+function toggleSidebar() {
+    const sb = document.getElementById('gameSidebar');
+    sb.classList.toggle('collapsed');
+    document.getElementById('sidebarToggle').textContent = sb.classList.contains('collapsed') ? '展开' : '收起';
+}
 
 /* ===== CONNECT ===== */
 function connect() {
@@ -263,7 +296,7 @@ function connect() {
     socket.on('room:player-join', (d) => addChat('system', `${d.name} 加入了房间`));
     socket.on('room:player-leave', (d) => addChat('system', `${d.name} 离开了房间`));
     socket.on('draw:stroke', onRemoteStroke);
-    socket.on('draw:clear', () => { clearCanvas(); });
+    socket.on('draw:clear', () => clearCanvas());
 }
 
 function createRoom() {
@@ -272,7 +305,6 @@ function createRoom() {
     if (!socket) connect();
     socket.emit('room:create', { playerName: myName }, (res) => { if (res.ok) { roomCode = res.code; isHost = true; showScreen('waiting'); } });
 }
-
 function joinRoom() {
     myName = document.getElementById('nameInput').value.trim();
     const code = document.getElementById('codeInput').value.trim().toUpperCase();
@@ -284,7 +316,6 @@ function joinRoom() {
         else showError('lobbyError', res.error);
     });
 }
-
 function startGame() { socket.emit('game:start', null, (res) => { if (!res.ok) showError('waitError', res.error); }); }
 function showError(id, msg) { const el = document.getElementById(id); el.textContent = msg; setTimeout(() => el.textContent = '', 3000); }
 
@@ -298,7 +329,7 @@ function onRoomUpdate(info) {
     info.players.forEach((p, i) => {
         const slot = document.createElement('div');
         slot.className = 'player-slot filled';
-        slot.innerHTML = `<div class="avatar">${i === 0 ? '🧑‍🎨' : '🕵️'}</div><div class="pname">${p.name}</div>${i === 0 ? '<div class="host-badge">房主</div>' : ''}${p.id === myId ? '<div class="host-badge" style="background:var(--accent2)">你</div>' : ''}`;
+        slot.innerHTML = `<div class="avatar">${i === 0 ? '🧑‍🎨' : '🕵️'}</div><div class="pname">${esc(p.name)}</div>${i === 0 ? '<div class="host-badge">房主</div>' : ''}${p.id === myId ? '<div class="host-badge" style="background:var(--accent2)">你</div>' : ''}`;
         grid.appendChild(slot);
     });
     for (let i = info.players.length; i < 4; i++) {
@@ -323,16 +354,16 @@ function onNewTurn(data) {
     if (isDrawer) {
         wd.innerHTML = `<div class="role">你来画！</div><div class="word" id="gWord">???</div><div class="cat-tag" id="gCatTag"></div>`;
     } else {
-        wd.innerHTML = `<div class="role">${data.drawer.name} 正在画...</div><div class="dashes" id="gDashes"></div><div class="hint">在右侧输入你的猜测</div>`;
+        wd.innerHTML = `<div class="role">${esc(data.drawer.name)} 正在画...</div><div class="dashes" id="gDashes"></div><div class="hint">在下方输入你的猜测</div>`;
     }
 
     setupCanvas();
     const tools = document.getElementById('gTools');
     if (isDrawer) {
         tools.innerHTML = `
-            <button class="tool-btn active" data-brush="2" onclick="setBrush(2,this)" title="细笔">·</button>
-            <button class="tool-btn" data-brush="4" onclick="setBrush(4,this)" title="中笔">●</button>
-            <button class="tool-btn" data-brush="8" onclick="setBrush(8,this)" title="粗笔">⬤</button>
+            <button class="tool-btn active" data-brush="2" onclick="setBrush(2,this)">·</button>
+            <button class="tool-btn" data-brush="4" onclick="setBrush(4,this)">●</button>
+            <button class="tool-btn" data-brush="8" onclick="setBrush(8,this)">⬤</button>
             <div class="tool-divider"></div>
             <div style="position:relative">
                 <div class="color-dot" id="colorBtn" style="background:${drawColor}" onclick="toggleColors(event)"></div>
@@ -349,53 +380,54 @@ function onNewTurn(data) {
     document.getElementById('gGuessBtn').disabled = isDrawer;
     document.getElementById('gChat').innerHTML = '';
     if (!isDrawer) addChat('system', '猜对可得分！速度越快分越高');
+
+    // Reset sidebar on mobile
+    const sb = document.getElementById('gameSidebar');
+    sb.classList.remove('collapsed');
+    const toggle = document.getElementById('sidebarToggle');
+    if (toggle) toggle.textContent = '收起';
+
     updateScoreboard(data.scores || []);
 }
 
 function onYourWord(d) {
-    const el = document.getElementById('gWord');
-    if (el) el.textContent = d.word;
-    const cat = document.getElementById('gCatTag');
-    if (cat) cat.textContent = d.cat;
+    const el = document.getElementById('gWord'); if (el) el.textContent = d.word;
+    const cat = document.getElementById('gCatTag'); if (cat) cat.textContent = d.cat;
 }
 function onHint(data) { const el = document.getElementById('gDashes'); if (el) el.textContent = '＿ '.repeat(data.length).trim(); }
 function onTimer(t) { const el = document.getElementById('gTimer'); el.textContent = t; el.className = 'timer-display'; if (t <= 10) el.classList.add('danger'); else if (t <= 20) el.classList.add('warning'); }
-
-function onCorrect(data) { addChat('correct', `🎉 ${data.guesserName} 猜对了！+${data.points}分`); }
+function onCorrect(data) { addChat('correct', `🎉 ${esc(data.guesserName)} 猜对了！+${data.points}分`); }
 
 function onWrongGuess(data) {
-    // Show the guess with partial match highlighting
     const isMe = data.name === myName;
     const area = document.getElementById('gChat');
     const div = document.createElement('div');
     div.className = 'chat-msg guess-msg';
 
-    // Build highlighted partial: hit chars in green, miss chars dimmed
-    let html = `<span class="ptag ${isMe ? 'me' : 'other'}">${data.name}：</span>`;
-    html += `<span class="partial">`;
-    for (let i = 0; i < data.display.length; i++) {
-        const ch = data.display[i];
-        if (ch === '*') {
-            html += `<span class="miss">*_</span>`;
-        } else {
-            html += `<span class="hit">${escapeHtml(ch)}</span>`;
+    // Build highlighted match display using status: exact/present/absent
+    let html = `<span class="ptag ${isMe ? 'me' : 'other'}">${esc(data.name)}：</span>`;
+    html += `<span class="match-display">`;
+    if (data.match && Array.isArray(data.match)) {
+        for (const m of data.match) {
+            const cls = m.status; // 'exact' | 'present' | 'absent'
+            html += `<span class="${cls}">${esc(m.char)}</span>`;
         }
+    } else {
+        // Fallback: just show the guess
+        html += esc(data.guess);
     }
     html += `</span>`;
     div.innerHTML = html;
     area.appendChild(div);
     area.scrollTop = area.scrollHeight;
 
-    // Show hint if any
-    if (data.hint) {
-        addChat('hint', data.hint);
-    }
+    if (data.hint) addChat('hint', data.hint);
 }
 
 function onTurnEnd(data) {
     document.getElementById('watchOverlay').classList.add('show');
     document.getElementById('watchText').textContent = data.correct ? '🎉 回答正确！' : '⏰ 时间到！';
-    document.getElementById('watchSub').innerHTML = `答案是「<strong>${escapeHtml(data.word)}</strong>」<br>分类：${data.cat}`;
+    document.getElementById('watchSub').innerHTML = `答案是「<strong>${esc(data.word)}</strong>」<br>分类：${data.cat}`;
     updateScoreboard(data.scores);
     setTimeout(() => document.getElementById('watchOverlay').classList.remove('show'), 3500);
 }
@@ -403,18 +435,17 @@ function onTurnEnd(data) {
 function onGameOver(data) {
     showScreen('results');
     document.getElementById('rTrophy').textContent = data.results[0].id === myId ? '🏆' : '🎉';
-    const list = document.getElementById('rList');
-    list.innerHTML = '';
+    const list = document.getElementById('rList'); list.innerHTML = '';
     data.results.forEach((r, i) => {
         const row = document.createElement('div');
         row.className = 'res-row' + (i === 0 ? ' winner' : '');
-        row.innerHTML = `<div class="res-rank ${i === 0 ? 'r1' : 'r2'}">${i === 0 ? '🏆' : '#' + (i + 1)}</div><div class="res-name">${escapeHtml(r.name)}${r.id === myId ? ' (你)' : ''}</div><div class="res-score">${r.score}</div>`;
+        row.innerHTML = `<div class="res-rank ${i === 0 ? 'r1' : 'r2'}">${i === 0 ? '🏆' : '#' + (i + 1)}</div><div class="res-name">${esc(r.name)}${r.id === myId ? ' (你)' : ''}</div><div class="res-score">${r.score}</div>`;
         list.appendChild(row);
     });
 }
 
 function updateScoreboard(scores) {
-    document.getElementById('gScoreboard').innerHTML = scores.map(s => `<div class="score-item ${s.id === myId ? 'me' : ''}"><span>${escapeHtml(s.name)}</span><span class="pts">${s.score}</span></div>`).join('');
+    document.getElementById('gScoreboard').innerHTML = scores.map(s => `<div class="score-item ${s.id === myId ? 'me' : ''}"><span>${esc(s.name)}</span><span class="pts">${s.score}</span></div>`).join('');
 }
 function backToLobby() { showScreen('lobby'); }
 
@@ -428,7 +459,6 @@ function addChat(type, data) {
     area.appendChild(div);
     area.scrollTop = area.scrollHeight;
 }
-function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function sendGuess() {
     const input = document.getElementById('gGuessInput');
@@ -436,6 +466,8 @@ function sendGuess() {
     if (!guess || isDrawer) return;
     socket.emit('game:guess', { guess });
     input.value = '';
+    // On mobile, focus back on input for quick re-guess
+    if (window.innerWidth <= 768) input.focus();
 }
 function skipTurn() { socket.emit('game:skip'); }
 
@@ -455,12 +487,7 @@ function clearAndSync() { clearCanvas(); socket.emit('draw:clear'); }
 
 function getPos(e) {
     const rect = drawCanvas.getBoundingClientRect();
-    const scaleX = drawCanvas.width / rect.width;
-    const scaleY = drawCanvas.height / rect.height;
-    return {
-        x: (e.clientX - rect.left) * scaleX,
-        y: (e.clientY - rect.top) * scaleY,
-    };
+    return { x: (e.clientX - rect.left) * (560 / rect.width), y: (e.clientY - rect.top) * (560 / rect.height) };
 }
 
 function drawStroke(x0, y0, x1, y1, color, size, erase) {
@@ -489,64 +516,47 @@ function setupDrawEvents() {
     drawCanvas.onmousedown = (e) => {
         if (!isDrawer) return;
         isDrawing = true;
-        const pos = getPos(e);
-        lastX = pos.x; lastY = pos.y;
-        drawDot(pos.x, pos.y, drawColor, brushSize, isEraser);
-        socket.emit('draw:stroke', { x0: pos.x, y0: pos.y, x1: pos.x, y1: pos.y, color: drawColor, size: brushSize, erase: isEraser });
+        const p = getPos(e); lastX = p.x; lastY = p.y;
+        drawDot(p.x, p.y, drawColor, brushSize, isEraser);
+        socket.emit('draw:stroke', { x0: p.x, y0: p.y, x1: p.x, y1: p.y, color: drawColor, size: brushSize, erase: isEraser });
     };
     drawCanvas.onmousemove = (e) => {
         if (!isDrawing || !isDrawer) return;
-        const pos = getPos(e);
-        drawStroke(lastX, lastY, pos.x, pos.y, drawColor, brushSize, isEraser);
-        socket.emit('draw:stroke', { x0: lastX, y0: lastY, x1: pos.x, y1: pos.y, color: drawColor, size: brushSize, erase: isEraser });
-        lastX = pos.x; lastY = pos.y;
+        const p = getPos(e);
+        drawStroke(lastX, lastY, p.x, p.y, drawColor, brushSize, isEraser);
+        socket.emit('draw:stroke', { x0: lastX, y0: lastY, x1: p.x, y1: p.y, color: drawColor, size: brushSize, erase: isEraser });
+        lastX = p.x; lastY = p.y;
     };
     drawCanvas.onmouseup = () => { isDrawing = false; };
     drawCanvas.onmouseleave = () => { isDrawing = false; };
 
-    drawCanvas.ontouchstart = (e) => { e.preventDefault(); if (!isDrawer) return; isDrawing = true; const pos = getTouchPos(e); lastX = pos.x; lastY = pos.y; drawDot(pos.x, pos.y, drawColor, brushSize, isEraser); socket.emit('draw:stroke', { x0: pos.x, y0: pos.y, x1: pos.x, y1: pos.y, color: drawColor, size: brushSize, erase: isEraser }); };
-    drawCanvas.ontouchmove = (e) => { e.preventDefault(); if (!isDrawing || !isDrawer) return; const pos = getTouchPos(e); drawStroke(lastX, lastY, pos.x, pos.y, drawColor, brushSize, isEraser); socket.emit('draw:stroke', { x0: lastX, y0: lastY, x1: pos.x, y1: pos.y, color: drawColor, size: brushSize, erase: isEraser }); lastX = pos.x; lastY = pos.y; };
+    drawCanvas.ontouchstart = (e) => { e.preventDefault(); if (!isDrawer) return; isDrawing = true; const p = getTouchPos(e); lastX = p.x; lastY = p.y; drawDot(p.x, p.y, drawColor, brushSize, isEraser); socket.emit('draw:stroke', { x0: p.x, y0: p.y, x1: p.x, y1: p.y, color: drawColor, size: brushSize, erase: isEraser }); };
+    drawCanvas.ontouchmove = (e) => { e.preventDefault(); if (!isDrawing || !isDrawer) return; const p = getTouchPos(e); drawStroke(lastX, lastY, p.x, p.y, drawColor, brushSize, isEraser); socket.emit('draw:stroke', { x0: lastX, y0: lastY, x1: p.x, y1: p.y, color: drawColor, size: brushSize, erase: isEraser }); lastX = p.x; lastY = p.y; };
     drawCanvas.ontouchend = () => { isDrawing = false; };
 
     document.getElementById('gGuessInput')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendGuess(); });
 }
 
 function getTouchPos(e) {
-    const touch = e.touches[0];
-    const rect = drawCanvas.getBoundingClientRect();
-    const scaleX = drawCanvas.width / rect.width;
-    const scaleY = drawCanvas.height / rect.height;
-    return { x: (touch.clientX - rect.left) * scaleX, y: (touch.clientY - rect.top) * scaleY };
+    const t = e.touches[0], rect = drawCanvas.getBoundingClientRect();
+    return { x: (t.clientX - rect.left) * (560 / rect.width), y: (t.clientY - rect.top) * (560 / rect.height) };
 }
 
 function onRemoteStroke(data) {
-    if (data.x0 === data.x1 && data.y0 === data.y1) {
-        drawDot(data.x0, data.y0, data.color, data.size, data.erase);
-    } else {
-        drawStroke(data.x0, data.y0, data.x1, data.y1, data.color, data.size, data.erase);
-    }
+    if (data.x0 === data.x1 && data.y0 === data.y1) drawDot(data.x0, data.y0, data.color, data.size, data.erase);
+    else drawStroke(data.x0, data.y0, data.x1, data.y1, data.color, data.size, data.erase);
 }
 
-/* ===== DRAW TOOLS ===== */
-function setBrush(size, btn) {
-    brushSize = size;
-    isEraser = false;
-    document.getElementById('eraserBtn')?.classList.remove('active');
-    document.querySelectorAll('[data-brush]').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-}
+/* ===== TOOLS ===== */
+function setBrush(size, btn) { brushSize = size; isEraser = false; document.getElementById('eraserBtn')?.classList.remove('active'); document.querySelectorAll('[data-brush]').forEach(b => b.classList.remove('active')); btn.classList.add('active'); }
 function toggleEraser() { isEraser = !isEraser; document.getElementById('eraserBtn')?.classList.toggle('active', isEraser); }
 
 function setupColorPopup() {
-    const popup = document.getElementById('colorPopup');
-    if (!popup) return;
+    const popup = document.getElementById('colorPopup'); if (!popup) return;
     popup.innerHTML = '';
-    const grid = document.createElement('div');
-    grid.className = 'grid';
+    const grid = document.createElement('div'); grid.className = 'grid';
     COLORS.forEach(c => {
-        const sw = document.createElement('div');
-        sw.className = 'sw';
-        sw.style.background = c;
+        const sw = document.createElement('div'); sw.className = 'sw'; sw.style.background = c;
         sw.onclick = () => { drawColor = c; isEraser = false; document.getElementById('colorBtn').style.background = c; document.getElementById('eraserBtn')?.classList.remove('active'); popup.classList.remove('show'); };
         grid.appendChild(sw);
     });
