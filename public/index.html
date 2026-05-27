@@ -8,132 +8,64 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0f0f1a;
-            --surface: #1a1a2e;
-            --surface2: #16213e;
-            --card: #1e2a45;
-            --accent: #ff6b6b;
-            --accent2: #4ecdc4;
-            --gold: #ffd93d;
-            --purple: #a29bfe;
-            --text: #eaeaea;
-            --text-dim: #6b7a8d;
-            --border: #2a3a5a;
+            --bg: #0f0f1a; --surface: #1a1a2e; --surface2: #16213e; --card: #1e2a45;
+            --accent: #ff6b6b; --accent2: #4ecdc4; --gold: #ffd93d; --purple: #a29bfe;
+            --text: #eaeaea; --text-dim: #6b7a8d; --border: #2a3a5a;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Noto Sans SC', sans-serif;
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+        body { font-family: 'Noto Sans SC', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; overflow-x: hidden; }
         .screen { display: none; min-height: 100vh; }
         .screen.active { display: flex; }
 
-        /* ===== LOBBY ===== */
-        #lobby {
-            flex-direction: column; align-items: center; justify-content: center; gap: 32px;
+        /* LOBBY */
+        #lobby { flex-direction: column; align-items: center; justify-content: center; gap: 32px;
             background: radial-gradient(ellipse at 30% 20%, rgba(78,205,196,0.08) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 80%, rgba(255,107,107,0.08) 0%, transparent 50%), var(--bg);
-        }
+                        radial-gradient(ellipse at 70% 80%, rgba(255,107,107,0.08) 0%, transparent 50%), var(--bg); }
         .lobby-title { font-size: 56px; font-weight: 900; text-align: center; }
         .lobby-title .g1 { background: linear-gradient(135deg, var(--accent), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .lobby-title .g2 { font-size: 18px; font-weight: 400; color: var(--text-dim); -webkit-text-fill-color: initial; margin-top: 6px; }
         .lobby-emoji { font-size: 72px; animation: bounce 2s ease-in-out infinite; }
         @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
-
-        .name-row {
-            display: flex; gap: 12px; align-items: center;
-        }
-        .name-row input {
-            background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
-            padding: 12px 18px; color: var(--text); font-size: 16px; font-family: inherit;
-            width: 240px; outline: none; text-align: center;
-        }
+        .name-row { display: flex; gap: 12px; align-items: center; }
+        .name-row input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 18px; color: var(--text); font-size: 16px; font-family: inherit; width: 240px; outline: none; text-align: center; }
         .name-row input:focus { border-color: var(--accent2); }
-
-        .lobby-actions { display: flex; gap: 16px; }
-        .btn {
-            border: none; border-radius: 10px; padding: 14px 36px; font-size: 16px;
-            font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.2s;
-        }
+        .btn { border: none; border-radius: 10px; padding: 14px 36px; font-size: 16px; font-weight: 700; font-family: inherit; cursor: pointer; transition: all 0.2s; }
         .btn-primary { background: var(--accent2); color: var(--bg); }
         .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
         .btn-secondary { background: var(--surface2); color: var(--text); border: 1px solid var(--border) !important; }
         .btn-secondary:hover { border-color: var(--accent2) !important; }
-        .btn-accent { background: var(--accent); color: white; }
-
-        .join-row {
-            display: flex; gap: 10px; align-items: center; margin-top: 8px;
-        }
-        .join-row input {
-            background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
-            padding: 12px 14px; color: var(--text); font-size: 20px; font-family: inherit;
-            width: 160px; outline: none; text-align: center; letter-spacing: 6px; text-transform: uppercase;
-        }
+        .join-row { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+        .join-row input { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; color: var(--text); font-size: 20px; font-family: inherit; width: 160px; outline: none; text-align: center; letter-spacing: 6px; text-transform: uppercase; }
         .join-row input:focus { border-color: var(--accent2); }
         .or-text { color: var(--text-dim); font-size: 14px; }
         .error-msg { color: var(--accent); font-size: 13px; margin-top: 8px; text-align: center; }
 
-        /* ===== WAITING ROOM ===== */
-        #waiting {
-            flex-direction: column; align-items: center; justify-content: center; gap: 28px;
-        }
-        .room-code-box {
-            text-align: center;
-        }
+        /* WAITING */
+        #waiting { flex-direction: column; align-items: center; justify-content: center; gap: 28px; }
+        .room-code-box { text-align: center; }
         .room-code-box .label { font-size: 14px; color: var(--text-dim); margin-bottom: 8px; }
-        .room-code {
-            font-size: 56px; font-weight: 900; letter-spacing: 12px;
-            background: linear-gradient(135deg, var(--accent2), var(--gold));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-        }
+        .room-code { font-size: 56px; font-weight: 900; letter-spacing: 12px; background: linear-gradient(135deg, var(--accent2), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .room-code-box .hint { font-size: 12px; color: var(--text-dim); margin-top: 6px; }
-
-        .players-grid {
-            display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 600px;
-        }
-        .player-slot {
-            background: var(--surface); border: 2px solid var(--border); border-radius: 12px;
-            padding: 16px 28px; text-align: center; min-width: 140px; transition: all 0.3s;
-        }
+        .players-grid { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; max-width: 600px; }
+        .player-slot { background: var(--surface); border: 2px solid var(--border); border-radius: 12px; padding: 16px 28px; text-align: center; min-width: 140px; transition: all 0.3s; }
         .player-slot.filled { border-color: var(--accent2); }
         .player-slot .avatar { font-size: 32px; margin-bottom: 6px; }
         .player-slot .pname { font-size: 14px; font-weight: 700; }
-        .player-slot .host-badge {
-            display: inline-block; font-size: 10px; background: var(--gold); color: var(--bg);
-            padding: 2px 6px; border-radius: 4px; margin-top: 4px; font-weight: 700;
-        }
+        .player-slot .host-badge { display: inline-block; font-size: 10px; background: var(--gold); color: var(--bg); padding: 2px 6px; border-radius: 4px; margin-top: 4px; font-weight: 700; }
         .player-slot.empty { border-style: dashed; opacity: 0.4; }
         .player-slot.empty .pname { color: var(--text-dim); }
-
         .waiting-msg { font-size: 14px; color: var(--text-dim); text-align: center; }
+        .settings-row { display: flex; gap: 20px; align-items: center; }
+        .setting-item { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-dim); }
+        .setting-item select { background: var(--surface2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 5px 8px; font-size: 13px; font-family: inherit; outline: none; }
 
-        .settings-row {
-            display: flex; gap: 20px; align-items: center;
-        }
-        .setting-item {
-            display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-dim);
-        }
-        .setting-item select {
-            background: var(--surface2); color: var(--text); border: 1px solid var(--border);
-            border-radius: 6px; padding: 5px 8px; font-size: 13px; font-family: inherit; outline: none;
-        }
-
-        /* ===== GAME ===== */
+        /* GAME */
         #game { flex-direction: column; height: 100vh; }
-        .game-topbar {
-            display: flex; align-items: center; padding: 8px 20px;
-            background: var(--surface); border-bottom: 1px solid var(--border); gap: 16px; flex-shrink: 0;
-        }
+        .game-topbar { display: flex; align-items: center; padding: 8px 20px; background: var(--surface); border-bottom: 1px solid var(--border); gap: 16px; flex-shrink: 0; }
         .game-logo { font-size: 16px; font-weight: 700; color: var(--accent); white-space: nowrap; }
         .round-info { font-size: 13px; color: var(--text-dim); }
         .round-info strong { color: var(--text); }
-        .timer-display {
-            font-size: 28px; font-weight: 900; min-width: 50px; text-align: center;
-            font-variant-numeric: tabular-nums;
-        }
+        .timer-display { font-size: 28px; font-weight: 900; min-width: 50px; text-align: center; font-variant-numeric: tabular-nums; }
         .timer-display.warning { color: var(--gold); }
         .timer-display.danger { color: var(--accent); animation: pulse 0.5s ease-in-out infinite; }
         @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.1)} }
@@ -143,129 +75,72 @@
         .score-item.me .pts { color: var(--accent2); }
 
         .game-body { display: flex; flex: 1; overflow: hidden; }
-        .draw-area {
-            flex: 1; display: flex; flex-direction: column; align-items: center;
-            justify-content: center; gap: 10px; padding: 16px;
-        }
+        .draw-area { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 16px; }
         .word-display { text-align: center; }
         .word-display .role { font-size: 14px; color: var(--text-dim); }
-        .word-display .word {
-            font-size: 32px; font-weight: 900; color: var(--gold);
-            letter-spacing: 8px; font-family: 'Ma Shan Zheng', cursive;
-        }
+        .word-display .word { font-size: 32px; font-weight: 900; color: var(--gold); letter-spacing: 8px; font-family: 'Ma Shan Zheng', cursive; }
+        .word-display .cat-tag { display: inline-block; font-size: 12px; background: rgba(255,217,61,0.15); color: var(--gold); padding: 2px 10px; border-radius: 10px; margin-top: 4px; }
         .word-display .hint { font-size: 14px; color: var(--accent2); }
-        .word-display .dashes {
-            font-size: 28px; letter-spacing: 8px; color: var(--accent2); font-weight: 700;
-        }
+        .word-display .dashes { font-size: 28px; letter-spacing: 8px; color: var(--accent2); font-weight: 700; }
 
-        .canvas-frame {
-            background: #fff; border-radius: 10px; overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3); position: relative;
-        }
-        #drawCanvas { display: block; cursor: crosshair; image-rendering: pixelated; }
+        .canvas-frame { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.3); position: relative; }
+        #drawCanvas { display: block; cursor: crosshair; }
 
-        .draw-tools {
-            display: flex; gap: 5px; align-items: center; padding: 6px 12px;
-            background: var(--surface); border-radius: 8px; border: 1px solid var(--border);
-        }
-        .tool-btn {
-            width: 30px; height: 30px; background: transparent; border: 2px solid transparent;
-            border-radius: 5px; color: var(--text-dim); font-size: 14px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; transition: all 0.15s;
-        }
+        .draw-tools { display: flex; gap: 5px; align-items: center; padding: 6px 12px; background: var(--surface); border-radius: 8px; border: 1px solid var(--border); position: relative; }
+        .tool-btn { width: 30px; height: 30px; background: transparent; border: 2px solid transparent; border-radius: 5px; color: var(--text-dim); font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
         .tool-btn:hover { color: var(--text); background: var(--surface2); }
         .tool-btn.active { color: var(--accent2); border-color: var(--accent2); background: rgba(78,205,196,0.1); }
         .tool-divider { width: 1px; height: 20px; background: var(--border); }
-        .color-dot {
-            width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border);
-            cursor: pointer; transition: transform 0.1s;
-        }
+        .color-dot { width: 22px; height: 22px; border-radius: 50%; border: 2px solid var(--border); cursor: pointer; transition: transform 0.1s; }
         .color-dot:hover { transform: scale(1.2); }
-        .size-btn {
-            width: 30px; height: 30px; background: var(--surface2); border: 1px solid var(--border);
-            border-radius: 5px; color: var(--text); font-size: 10px; font-weight: 700;
-            cursor: pointer; display: flex; align-items: center; justify-content: center;
-        }
-        .size-btn.active { border-color: var(--accent2); color: var(--accent2); }
-        .eraser-btn {
-            width: 30px; height: 30px; background: var(--surface2); border: 1px solid var(--border);
-            border-radius: 5px; color: var(--text-dim); font-size: 13px; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-        }
+        .eraser-btn { width: 30px; height: 30px; background: var(--surface2); border: 1px solid var(--border); border-radius: 5px; color: var(--text-dim); font-size: 13px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         .eraser-btn.active { border-color: var(--accent); color: var(--accent); }
-        .clear-btn {
-            background: transparent; border: 1px solid var(--border); border-radius: 5px;
-            color: var(--text-dim); font-size: 11px; padding: 5px 10px; cursor: pointer; font-family: inherit;
-        }
+        .clear-btn, .skip-btn { background: transparent; border: 1px solid var(--border); border-radius: 5px; color: var(--text-dim); font-size: 11px; padding: 5px 10px; cursor: pointer; font-family: inherit; }
         .clear-btn:hover { border-color: var(--accent); color: var(--accent); }
-        .skip-btn {
-            background: transparent; border: 1px solid var(--accent); border-radius: 5px;
-            color: var(--accent); font-size: 11px; padding: 5px 10px; cursor: pointer; font-family: inherit;
-        }
+        .skip-btn { border-color: var(--accent); color: var(--accent); }
 
-        /* Color palette popup */
-        .color-popup {
-            display: none; position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
-            background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
-            padding: 8px; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-        }
+        .color-popup { display: none; position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 8px; z-index: 20; box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
         .color-popup.show { display: block; }
         .color-popup .grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 3px; }
-        .color-popup .sw {
-            width: 22px; height: 22px; border-radius: 3px; border: 2px solid transparent;
-            cursor: pointer; transition: transform 0.1s;
-        }
+        .color-popup .sw { width: 22px; height: 22px; border-radius: 3px; border: 2px solid transparent; cursor: pointer; transition: transform 0.1s; }
         .color-popup .sw:hover { transform: scale(1.2); }
 
-        /* Sidebar */
-        .game-sidebar {
-            width: 280px; background: var(--surface); border-left: 1px solid var(--border);
-            display: flex; flex-direction: column; flex-shrink: 0;
-        }
-        .sidebar-header {
-            padding: 12px 14px; border-bottom: 1px solid var(--border);
-            font-size: 13px; font-weight: 700;
-        }
+        .game-sidebar { width: 300px; background: var(--surface); border-left: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar-header { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 13px; font-weight: 700; }
         .chat-area { flex: 1; overflow-y: auto; padding: 10px; display: flex; flex-direction: column; gap: 4px; }
-        .chat-msg { padding: 6px 10px; border-radius: 6px; font-size: 12px; line-height: 1.4; animation: fadeIn 0.2s ease; }
+        .chat-msg { padding: 6px 10px; border-radius: 6px; font-size: 12px; line-height: 1.5; animation: fadeIn 0.2s ease; word-break: break-all; }
         @keyframes fadeIn { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
         .chat-msg.system { background: rgba(78,205,196,0.08); color: var(--accent2); text-align: center; font-size: 11px; }
         .chat-msg.correct { background: rgba(78,205,196,0.15); color: var(--accent2); text-align: center; font-weight: 700; font-size: 14px; }
-        .chat-msg.wrong { background: rgba(255,107,107,0.06); color: var(--text-dim); }
+        .chat-msg.guess-msg { background: rgba(255,255,255,0.03); }
+        .chat-msg.guess-msg .partial { font-family: monospace; font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: 2px; }
+        .chat-msg.guess-msg .partial .hit { color: var(--accent2); }
+        .chat-msg.guess-msg .partial .miss { color: var(--text-dim); }
+        .chat-msg.hint-msg { background: rgba(255,217,61,0.1); color: var(--gold); text-align: center; font-weight: 500; }
         .chat-msg .ptag { font-weight: 700; margin-right: 4px; }
         .chat-msg .ptag.me { color: var(--accent2); }
         .chat-msg .ptag.other { color: var(--accent); }
-        .chat-msg .ptag.drawer { color: var(--gold); }
 
         .guess-area { padding: 10px; border-top: 1px solid var(--border); }
         .guess-row { display: flex; gap: 6px; }
-        .guess-row input {
-            flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 6px;
-            padding: 8px 12px; color: var(--text); font-size: 14px; font-family: inherit; outline: none;
-        }
+        .guess-row input { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; color: var(--text); font-size: 14px; font-family: inherit; outline: none; }
         .guess-row input:focus { border-color: var(--accent2); }
-        .guess-row button {
-            background: var(--accent2); color: var(--bg); border: none; border-radius: 6px;
-            padding: 8px 16px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer;
-        }
+        .guess-row button { background: var(--accent2); color: var(--bg); border: none; border-radius: 6px; padding: 8px 16px; font-size: 14px; font-weight: 700; font-family: inherit; cursor: pointer; }
         .guess-row button:disabled { background: var(--border); color: var(--text-dim); cursor: not-allowed; }
 
-        /* ===== TRANSITION ===== */
+        /* TRANSITION */
         #transition { flex-direction: column; align-items: center; justify-content: center; gap: 20px; }
         .trans-emoji { font-size: 56px; }
         .trans-text { font-size: 32px; font-weight: 900; }
         .trans-sub { font-size: 15px; color: var(--text-dim); }
 
-        /* ===== RESULTS ===== */
+        /* RESULTS */
         #results { flex-direction: column; align-items: center; justify-content: center; gap: 28px;
             background: radial-gradient(ellipse at 50% 30%, rgba(255,217,61,0.08) 0%, transparent 60%), var(--bg); }
         .res-trophy { font-size: 72px; animation: bounce 2s ease-in-out infinite; }
         .res-title { font-size: 42px; font-weight: 900; }
         .res-list { display: flex; flex-direction: column; gap: 12px; min-width: 300px; }
-        .res-row {
-            display: flex; align-items: center; gap: 16px; padding: 14px 20px;
-            background: var(--surface); border-radius: 10px; border: 1px solid var(--border);
-        }
+        .res-row { display: flex; align-items: center; gap: 16px; padding: 14px 20px; background: var(--surface); border-radius: 10px; border: 1px solid var(--border); }
         .res-row.winner { border-color: var(--gold); background: rgba(255,217,61,0.05); }
         .res-rank { font-size: 24px; font-weight: 900; width: 36px; }
         .res-rank.r1 { color: var(--gold); }
@@ -273,11 +148,7 @@
         .res-name { flex: 1; font-weight: 700; }
         .res-score { font-size: 24px; font-weight: 900; color: var(--accent2); }
 
-        /* ===== OVERLAY (not drawer) ===== */
-        .watch-overlay {
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-            z-index: 50; flex-direction: column; align-items: center; justify-content: center; gap: 16px;
-        }
+        .watch-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 50; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
         .watch-overlay.show { display: flex; }
         .watch-overlay .emoji { font-size: 48px; }
         .watch-overlay .text { font-size: 24px; font-weight: 700; }
@@ -286,19 +157,11 @@
 </head>
 <body>
 
-<!-- LOBBY -->
 <div class="screen active" id="lobby">
     <div class="lobby-emoji">🎨</div>
-    <div class="lobby-title">
-        <div class="g1">你画我猜</div>
-        <div class="g2">在线多人对战</div>
-    </div>
-    <div class="name-row">
-        <input type="text" id="nameInput" placeholder="输入你的昵称" value="" maxlength="8">
-    </div>
-    <div class="lobby-actions">
-        <button class="btn btn-primary" onclick="createRoom()">创建房间</button>
-    </div>
+    <div class="lobby-title"><div class="g1">你画我猜</div><div class="g2">在线多人对战</div></div>
+    <div class="name-row"><input type="text" id="nameInput" placeholder="输入你的昵称" maxlength="8"></div>
+    <div class="lobby-actions"><button class="btn btn-primary" onclick="createRoom()">创建房间</button></div>
     <div class="or-text">- 或者加入已有房间 -</div>
     <div class="join-row">
         <input type="text" id="codeInput" placeholder="输入房间号" maxlength="4">
@@ -307,7 +170,6 @@
     <div class="error-msg" id="lobbyError"></div>
 </div>
 
-<!-- WAITING -->
 <div class="screen" id="waiting">
     <div class="room-code-box">
         <div class="label">房间号</div>
@@ -316,29 +178,14 @@
     </div>
     <div class="players-grid" id="playersGrid"></div>
     <div class="settings-row" id="settingsRow">
-        <div class="setting-item">
-            <span>⏱</span>
-            <select id="setTime">
-                <option value="30">30秒</option>
-                <option value="60" selected>60秒</option>
-                <option value="90">90秒</option>
-            </select>
-        </div>
-        <div class="setting-item">
-            <span>📊</span>
-            <select id="setRounds">
-                <option value="4">4回合</option>
-                <option value="6" selected>6回合</option>
-                <option value="8">8回合</option>
-            </select>
-        </div>
+        <div class="setting-item"><span>⏱</span><select id="setTime"><option value="30">30秒</option><option value="60" selected>60秒</option><option value="90">90秒</option></select></div>
+        <div class="setting-item"><span>📊</span><select id="setRounds"><option value="4">4回合</option><option value="6" selected>6回合</option><option value="8">8回合</option></select></div>
     </div>
     <button class="btn btn-primary" id="startBtn" onclick="startGame()">开始游戏</button>
     <div class="waiting-msg" id="waitingMsg">等待更多玩家加入...</div>
     <div class="error-msg" id="waitError"></div>
 </div>
 
-<!-- GAME -->
 <div class="screen" id="game">
     <div class="game-topbar">
         <div class="game-logo">你画我猜</div>
@@ -349,9 +196,7 @@
     <div class="game-body">
         <div class="draw-area">
             <div class="word-display" id="gWordDisplay"></div>
-            <div class="canvas-frame">
-                <canvas id="drawCanvas"></canvas>
-            </div>
+            <div class="canvas-frame"><canvas id="drawCanvas"></canvas></div>
             <div class="draw-tools" id="gTools"></div>
         </div>
         <div class="game-sidebar">
@@ -367,14 +212,12 @@
     </div>
 </div>
 
-<!-- TRANSITION -->
 <div class="screen" id="transition">
     <div class="trans-emoji" id="tEmoji">🎉</div>
     <div class="trans-text" id="tText">回答正确！</div>
     <div class="trans-sub" id="tSub"></div>
 </div>
 
-<!-- RESULTS -->
 <div class="screen" id="results">
     <div class="res-trophy" id="rTrophy">🏆</div>
     <div class="res-title">游戏结束！</div>
@@ -382,7 +225,6 @@
     <button class="btn btn-primary" onclick="backToLobby()">返回大厅</button>
 </div>
 
-<!-- WATCH OVERLAY (for guessers, shown during turn-end) -->
 <div class="watch-overlay" id="watchOverlay">
     <div class="emoji">👀</div>
     <div class="text" id="watchText">请等待下一位画手...</div>
@@ -391,26 +233,9 @@
 
 <script src="/socket.io/socket.io.js"></script>
 <script>
-/* ===========================================
-   STATE
-   =========================================== */
-let socket = null;
-let myId = '';
-let myName = '';
-let roomCode = '';
-let isHost = false;
-let isDrawer = false;
-let currentWord = '';
-let myScore = 0;
-
-// Drawing
-let drawColor = '#000000';
-let brushSize = 2;
-let isEraser = false;
-let isDrawing = false;
-let lastPx = null;
-let pixelSize = 16;
-let canvasSize = 32;
+let socket = null, myId = '', myName = '', roomCode = '', isHost = false, isDrawer = false;
+let drawColor = '#000000', brushSize = 4, isEraser = false, isDrawing = false;
+let lastX = 0, lastY = 0;
 
 const COLORS = [
     '#000000','#434343','#666666','#999999','#cccccc','#ffffff',
@@ -419,21 +244,12 @@ const COLORS = [
     '#c9daf8','#cfe2f3','#d9d2e9','#ead1dc','#ff6b6b','#4ecdc4',
 ];
 
-/* ===========================================
-   SCREENS
-   =========================================== */
-function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
-}
+function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
-/* ===========================================
-   LOBBY
-   =========================================== */
+/* ===== CONNECT ===== */
 function connect() {
     socket = io();
     myId = socket.id;
-
     socket.on('connect', () => { myId = socket.id; });
     socket.on('room:update', onRoomUpdate);
     socket.on('game:new-turn', onNewTurn);
@@ -446,23 +262,15 @@ function connect() {
     socket.on('game:wrong-guess', onWrongGuess);
     socket.on('room:player-join', (d) => addChat('system', `${d.name} 加入了房间`));
     socket.on('room:player-leave', (d) => addChat('system', `${d.name} 离开了房间`));
-    socket.on('draw:pixel', onRemotePixel);
-    socket.on('draw:line', onRemoteLine);
+    socket.on('draw:stroke', onRemoteStroke);
     socket.on('draw:clear', () => { clearCanvas(); });
-    socket.on('chat:message', (d) => addChat('msg', d));
 }
 
 function createRoom() {
     myName = document.getElementById('nameInput').value.trim();
     if (!myName) { showError('lobbyError', '请输入昵称'); return; }
     if (!socket) connect();
-    socket.emit('room:create', { playerName: myName }, (res) => {
-        if (res.ok) {
-            roomCode = res.code;
-            isHost = true;
-            showScreen('waiting');
-        }
-    });
+    socket.emit('room:create', { playerName: myName }, (res) => { if (res.ok) { roomCode = res.code; isHost = true; showScreen('waiting'); } });
 }
 
 function joinRoom() {
@@ -472,99 +280,59 @@ function joinRoom() {
     if (!code || code.length !== 4) { showError('lobbyError', '请输入4位房间号'); return; }
     if (!socket) connect();
     socket.emit('room:join', { code, playerName: myName }, (res) => {
-        if (res.ok) {
-            roomCode = res.code;
-            isHost = false;
-            showScreen('waiting');
-        } else {
-            showError('lobbyError', res.error);
-        }
+        if (res.ok) { roomCode = res.code; isHost = false; showScreen('waiting'); }
+        else showError('lobbyError', res.error);
     });
 }
 
-function startGame() {
-    socket.emit('game:start', null, (res) => {
-        if (!res.ok) showError('waitError', res.error);
-    });
-}
+function startGame() { socket.emit('game:start', null, (res) => { if (!res.ok) showError('waitError', res.error); }); }
+function showError(id, msg) { const el = document.getElementById(id); el.textContent = msg; setTimeout(() => el.textContent = '', 3000); }
 
-function showError(id, msg) {
-    const el = document.getElementById(id);
-    el.textContent = msg;
-    setTimeout(() => el.textContent = '', 3000);
-}
-
-/* ===========================================
-   WAITING ROOM UPDATE
-   =========================================== */
+/* ===== WAITING ROOM ===== */
 function onRoomUpdate(info) {
     if (info.state === 'playing' || info.state === 'transition') return;
     if (!document.getElementById('waiting').classList.contains('active')) return;
-
     document.getElementById('roomCode').textContent = info.code;
-    document.getElementById('roomTotal') && (document.getElementById('roomTotal').textContent = info.totalRounds);
-
     const grid = document.getElementById('playersGrid');
     grid.innerHTML = '';
     info.players.forEach((p, i) => {
         const slot = document.createElement('div');
         slot.className = 'player-slot filled';
-        slot.innerHTML = `
-            <div class="avatar">${i === 0 ? '🧑‍🎨' : '🕵️'}</div>
-            <div class="pname">${p.name}</div>
-            ${i === 0 ? '<div class="host-badge">房主</div>' : ''}
-            ${p.id === myId ? '<div class="host-badge" style="background:var(--accent2)">你</div>' : ''}
-        `;
+        slot.innerHTML = `<div class="avatar">${i === 0 ? '🧑‍🎨' : '🕵️'}</div><div class="pname">${p.name}</div>${i === 0 ? '<div class="host-badge">房主</div>' : ''}${p.id === myId ? '<div class="host-badge" style="background:var(--accent2)">你</div>' : ''}`;
         grid.appendChild(slot);
     });
-
     for (let i = info.players.length; i < 4; i++) {
         const slot = document.createElement('div');
         slot.className = 'player-slot empty';
         slot.innerHTML = '<div class="avatar">+</div><div class="pname">等待加入</div>';
         grid.appendChild(slot);
     }
-
     document.getElementById('startBtn').style.display = isHost ? '' : 'none';
     document.getElementById('settingsRow').style.display = isHost ? 'flex' : 'none';
-    document.getElementById('waitingMsg').textContent =
-        info.players.length < 2 ? '等待更多玩家加入...' : '人齐了，房主点击开始！';
+    document.getElementById('waitingMsg').textContent = info.players.length < 2 ? '等待更多玩家加入...' : '人齐了，房主点击开始！';
 }
 
-/* ===========================================
-   GAME: NEW TURN
-   =========================================== */
+/* ===== GAME ===== */
 function onNewTurn(data) {
-    canvasSize = data.canvasSize;
-    pixelSize = Math.floor(Math.min(520, window.innerWidth - 400) / canvasSize);
-    if (pixelSize < 8) pixelSize = 8;
-
     isDrawer = data.drawer.id === myId;
-    currentWord = '';
     showScreen('game');
     document.getElementById('watchOverlay').classList.remove('show');
-
-    // Round
     document.getElementById('gRound').textContent = data.round;
 
-    // Word display
     const wd = document.getElementById('gWordDisplay');
     if (isDrawer) {
-        wd.innerHTML = `<div class="role">你来画！</div><div class="word" id="gWord">???</div>`;
+        wd.innerHTML = `<div class="role">你来画！</div><div class="word" id="gWord">???</div><div class="cat-tag" id="gCatTag"></div>`;
     } else {
         wd.innerHTML = `<div class="role">${data.drawer.name} 正在画...</div><div class="dashes" id="gDashes"></div><div class="hint">在右侧输入你的猜测</div>`;
     }
 
-    // Setup canvas
     setupCanvas();
-
-    // Tools
     const tools = document.getElementById('gTools');
     if (isDrawer) {
         tools.innerHTML = `
-            <button class="tool-btn active" data-brush="1" onclick="setBrush(1,this)">·</button>
-            <button class="tool-btn" data-brush="2" onclick="setBrush(2,this)">●</button>
-            <button class="tool-btn" data-brush="3" onclick="setBrush(3,this)">⬤</button>
+            <button class="tool-btn active" data-brush="2" onclick="setBrush(2,this)" title="细笔">·</button>
+            <button class="tool-btn" data-brush="4" onclick="setBrush(4,this)" title="中笔">●</button>
+            <button class="tool-btn" data-brush="8" onclick="setBrush(8,this)" title="粗笔">⬤</button>
             <div class="tool-divider"></div>
             <div style="position:relative">
                 <div class="color-dot" id="colorBtn" style="background:${drawColor}" onclick="toggleColors(event)"></div>
@@ -573,123 +341,94 @@ function onNewTurn(data) {
             <div class="tool-divider"></div>
             <button class="eraser-btn" id="eraserBtn" onclick="toggleEraser()">◻</button>
             <button class="clear-btn" onclick="clearAndSync()">清空</button>
-            <button class="skip-btn" onclick="skipTurn()">跳过</button>
-        `;
+            <button class="skip-btn" onclick="skipTurn()">跳过</button>`;
         setupColorPopup();
-    } else {
-        tools.innerHTML = '';
-    }
+    } else { tools.innerHTML = ''; }
 
-    // Guess area
     document.getElementById('gGuessInput').disabled = isDrawer;
     document.getElementById('gGuessBtn').disabled = isDrawer;
-
-    // Chat
     document.getElementById('gChat').innerHTML = '';
-    if (!isDrawer) {
-        addChat('system', `猜对可得分！速度越快分越高`);
-    }
-
-    // Scoreboard
+    if (!isDrawer) addChat('system', '猜对可得分！速度越快分越高');
     updateScoreboard(data.scores || []);
 }
 
-function onYourWord(word) {
-    currentWord = word;
+function onYourWord(d) {
     const el = document.getElementById('gWord');
-    if (el) el.textContent = word;
+    if (el) el.textContent = d.word;
+    const cat = document.getElementById('gCatTag');
+    if (cat) cat.textContent = d.cat;
 }
+function onHint(data) { const el = document.getElementById('gDashes'); if (el) el.textContent = '＿ '.repeat(data.length).trim(); }
+function onTimer(t) { const el = document.getElementById('gTimer'); el.textContent = t; el.className = 'timer-display'; if (t <= 10) el.classList.add('danger'); else if (t <= 20) el.classList.add('warning'); }
 
-function onHint(data) {
-    const el = document.getElementById('gDashes');
-    if (el) el.textContent = '＿ '.repeat(data.length).trim();
-}
-
-function onTimer(t) {
-    const el = document.getElementById('gTimer');
-    el.textContent = t;
-    el.className = 'timer-display';
-    if (t <= 10) el.classList.add('danger');
-    else if (t <= 20) el.classList.add('warning');
-}
-
-function onCorrect(data) {
-    addChat('correct', `🎉 ${data.guesserName} 猜对了！+${data.points}分`);
-}
+function onCorrect(data) { addChat('correct', `🎉 ${data.guesserName} 猜对了！+${data.points}分`); }
 
 function onWrongGuess(data) {
-    addChat('wrong', `${data.name}：${data.guess}`);
+    // Show the guess with partial match highlighting
+    const isMe = data.name === myName;
+    const area = document.getElementById('gChat');
+    const div = document.createElement('div');
+    div.className = 'chat-msg guess-msg';
+
+    // Build highlighted partial: hit chars in green, miss chars dimmed
+    let html = `<span class="ptag ${isMe ? 'me' : 'other'}">${data.name}：</span>`;
+    html += `<span class="partial">`;
+    for (let i = 0; i < data.display.length; i++) {
+        const ch = data.display[i];
+        if (ch === '*') {
+            html += `<span class="miss">*_</span>`;
+        } else {
+            html += `<span class="hit">${escapeHtml(ch)}</span>`;
+        }
+    }
+    html += `</span>`;
+    div.innerHTML = html;
+    area.appendChild(div);
+    area.scrollTop = area.scrollHeight;
+
+    // Show hint if any
+    if (data.hint) {
+        addChat('hint', data.hint);
+    }
 }
 
 function onTurnEnd(data) {
     document.getElementById('watchOverlay').classList.add('show');
     document.getElementById('watchText').textContent = data.correct ? '🎉 回答正确！' : '⏰ 时间到！';
-    document.getElementById('watchSub').textContent = `答案是「${data.word}」`;
-
+    document.getElementById('watchSub').innerHTML = `答案是「<strong>${escapeHtml(data.word)}</strong>」<br>分类：${data.cat}`;
     updateScoreboard(data.scores);
-
-    setTimeout(() => {
-        document.getElementById('watchOverlay').classList.remove('show');
-    }, 3500);
+    setTimeout(() => document.getElementById('watchOverlay').classList.remove('show'), 3500);
 }
 
 function onGameOver(data) {
     showScreen('results');
-    const me = data.results.find(r => r.id === myId);
     document.getElementById('rTrophy').textContent = data.results[0].id === myId ? '🏆' : '🎉';
-
     const list = document.getElementById('rList');
     list.innerHTML = '';
     data.results.forEach((r, i) => {
         const row = document.createElement('div');
         row.className = 'res-row' + (i === 0 ? ' winner' : '');
-        row.innerHTML = `
-            <div class="res-rank ${i === 0 ? 'r1' : 'r2'}">${i === 0 ? '🏆' : '#' + (i + 1)}</div>
-            <div class="res-name">${r.name}${r.id === myId ? ' (你)' : ''}</div>
-            <div class="res-score">${r.score}</div>
-        `;
+        row.innerHTML = `<div class="res-rank ${i === 0 ? 'r1' : 'r2'}">${i === 0 ? '🏆' : '#' + (i + 1)}</div><div class="res-name">${escapeHtml(r.name)}${r.id === myId ? ' (你)' : ''}</div><div class="res-score">${r.score}</div>`;
         list.appendChild(row);
     });
 }
 
 function updateScoreboard(scores) {
-    const sb = document.getElementById('gScoreboard');
-    sb.innerHTML = scores.map(s => `
-        <div class="score-item ${s.id === myId ? 'me' : ''}">
-            <span>${s.name}</span>
-            <span class="pts">${s.score}</span>
-        </div>
-    `).join('');
+    document.getElementById('gScoreboard').innerHTML = scores.map(s => `<div class="score-item ${s.id === myId ? 'me' : ''}"><span>${escapeHtml(s.name)}</span><span class="pts">${s.score}</span></div>`).join('');
 }
+function backToLobby() { showScreen('lobby'); }
 
-function backToLobby() {
-    showScreen('lobby');
-}
-
-/* ===========================================
-   CHAT
-   =========================================== */
+/* ===== CHAT ===== */
 function addChat(type, data) {
     const area = document.getElementById('gChat');
     const div = document.createElement('div');
-    if (type === 'system') {
-        div.className = 'chat-msg system';
-        div.textContent = data;
-    } else if (type === 'correct') {
-        div.className = 'chat-msg correct';
-        div.textContent = data;
-    } else if (type === 'msg') {
-        const isMe = data.name === myName;
-        div.className = 'chat-msg wrong';
-        div.innerHTML = `<span class="ptag ${isMe ? 'me' : 'other'}">${data.name}：</span>${escapeHtml(data.message)}`;
-    }
+    if (type === 'system') { div.className = 'chat-msg system'; div.textContent = data; }
+    else if (type === 'correct') { div.className = 'chat-msg correct'; div.textContent = data; }
+    else if (type === 'hint') { div.className = 'chat-msg hint-msg'; div.textContent = data; }
     area.appendChild(div);
     area.scrollTop = area.scrollHeight;
 }
-
-function escapeHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+function escapeHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function sendGuess() {
     const input = document.getElementById('gGuessInput');
@@ -698,193 +437,97 @@ function sendGuess() {
     socket.emit('game:guess', { guess });
     input.value = '';
 }
+function skipTurn() { socket.emit('game:skip'); }
 
-function skipTurn() {
-    socket.emit('game:skip');
-}
-
-/* ===========================================
-   CANVAS
-   =========================================== */
+/* ===== CANVAS - SMOOTH DRAWING ===== */
 const drawCanvas = document.getElementById('drawCanvas');
 const drawCtx = drawCanvas.getContext('2d');
 
 function setupCanvas() {
-    const size = pixelSize * canvasSize;
-    drawCanvas.width = size;
-    drawCanvas.height = size;
+    drawCanvas.width = 560;
+    drawCanvas.height = 560;
     clearCanvas();
     setupDrawEvents();
 }
 
-function clearCanvas() {
-    drawCtx.fillStyle = '#ffffff';
-    drawCtx.fillRect(0, 0, drawCanvas.width, drawCanvas.height);
-}
+function clearCanvas() { drawCtx.fillStyle = '#ffffff'; drawCtx.fillRect(0, 0, 560, 560); }
+function clearAndSync() { clearCanvas(); socket.emit('draw:clear'); }
 
-function clearAndSync() {
-    clearCanvas();
-    socket.emit('draw:clear');
-}
-
-function getCell(e) {
+function getPos(e) {
     const rect = drawCanvas.getBoundingClientRect();
-    const x = Math.floor((e.clientX - rect.left) / pixelSize);
-    const y = Math.floor((e.clientY - rect.top) / pixelSize);
+    const scaleX = drawCanvas.width / rect.width;
+    const scaleY = drawCanvas.height / rect.height;
     return {
-        x: Math.max(0, Math.min(canvasSize - 1, x)),
-        y: Math.max(0, Math.min(canvasSize - 1, y))
+        x: (e.clientX - rect.left) * scaleX,
+        y: (e.clientY - rect.top) * scaleY,
     };
 }
 
+function drawStroke(x0, y0, x1, y1, color, size, erase) {
+    drawCtx.save();
+    drawCtx.strokeStyle = erase ? '#ffffff' : color;
+    drawCtx.lineWidth = size;
+    drawCtx.lineCap = 'round';
+    drawCtx.lineJoin = 'round';
+    drawCtx.beginPath();
+    drawCtx.moveTo(x0, y0);
+    drawCtx.lineTo(x1, y1);
+    drawCtx.stroke();
+    drawCtx.restore();
+}
+
+function drawDot(x, y, color, size, erase) {
+    drawCtx.save();
+    drawCtx.fillStyle = erase ? '#ffffff' : color;
+    drawCtx.beginPath();
+    drawCtx.arc(x, y, size / 2, 0, Math.PI * 2);
+    drawCtx.fill();
+    drawCtx.restore();
+}
+
 function setupDrawEvents() {
-    drawCanvas.onmousedown = (e) => { isDrawing = true; drawPixel(e); };
-    drawCanvas.onmousemove = (e) => { if (isDrawing) drawPixel(e); };
-    drawCanvas.onmouseup = () => { isDrawing = false; lastPx = null; };
-    drawCanvas.onmouseleave = () => { isDrawing = false; lastPx = null; };
+    drawCanvas.onmousedown = (e) => {
+        if (!isDrawer) return;
+        isDrawing = true;
+        const pos = getPos(e);
+        lastX = pos.x; lastY = pos.y;
+        drawDot(pos.x, pos.y, drawColor, brushSize, isEraser);
+        socket.emit('draw:stroke', { x0: pos.x, y0: pos.y, x1: pos.x, y1: pos.y, color: drawColor, size: brushSize, erase: isEraser });
+    };
+    drawCanvas.onmousemove = (e) => {
+        if (!isDrawing || !isDrawer) return;
+        const pos = getPos(e);
+        drawStroke(lastX, lastY, pos.x, pos.y, drawColor, brushSize, isEraser);
+        socket.emit('draw:stroke', { x0: lastX, y0: lastY, x1: pos.x, y1: pos.y, color: drawColor, size: brushSize, erase: isEraser });
+        lastX = pos.x; lastY = pos.y;
+    };
+    drawCanvas.onmouseup = () => { isDrawing = false; };
+    drawCanvas.onmouseleave = () => { isDrawing = false; };
 
-    drawCanvas.ontouchstart = (e) => { e.preventDefault(); isDrawing = true; drawTouch(e); };
-    drawCanvas.ontouchmove = (e) => { e.preventDefault(); if (isDrawing) drawTouch(e); };
-    drawCanvas.ontouchend = () => { isDrawing = false; lastPx = null; };
+    drawCanvas.ontouchstart = (e) => { e.preventDefault(); if (!isDrawer) return; isDrawing = true; const pos = getTouchPos(e); lastX = pos.x; lastY = pos.y; drawDot(pos.x, pos.y, drawColor, brushSize, isEraser); socket.emit('draw:stroke', { x0: pos.x, y0: pos.y, x1: pos.x, y1: pos.y, color: drawColor, size: brushSize, erase: isEraser }); };
+    drawCanvas.ontouchmove = (e) => { e.preventDefault(); if (!isDrawing || !isDrawer) return; const pos = getTouchPos(e); drawStroke(lastX, lastY, pos.x, pos.y, drawColor, brushSize, isEraser); socket.emit('draw:stroke', { x0: lastX, y0: lastY, x1: pos.x, y1: pos.y, color: drawColor, size: brushSize, erase: isEraser }); lastX = pos.x; lastY = pos.y; };
+    drawCanvas.ontouchend = () => { isDrawing = false; };
 
-    document.getElementById('gGuessInput')?.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') sendGuess();
-    });
+    document.getElementById('gGuessInput')?.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendGuess(); });
 }
 
-function drawPixel(e) {
-    if (!isDrawer) return;
-    const { x, y } = getCell(e);
-    const color = isEraser ? '#ffffff' : drawColor;
-    const size = brushSize;
-
-    for (let dy = 0; dy < size; dy++) {
-        for (let dx = 0; dx < size; dx++) {
-            const px = x + dx - Math.floor(size / 2);
-            const py = y + dy - Math.floor(size / 2);
-            if (px >= 0 && px < canvasSize && py >= 0 && py < canvasSize) {
-                drawCtx.fillStyle = color;
-                drawCtx.fillRect(px * pixelSize, py * pixelSize, pixelSize, pixelSize);
-            }
-        }
-    }
-
-    if (lastPx) {
-        bresenham(lastPx.x, lastPx.y, x, y, (bx, by) => {
-            for (let dy = 0; dy < size; dy++) {
-                for (let dx = 0; dx < size; dx++) {
-                    const px = bx + dx - Math.floor(size / 2);
-                    const py = by + dy - Math.floor(size / 2);
-                    if (px >= 0 && px < canvasSize && py >= 0 && py < canvasSize) {
-                        drawCtx.fillStyle = color;
-                        drawCtx.fillRect(px * pixelSize, py * pixelSize, pixelSize, pixelSize);
-                    }
-                }
-            }
-        });
-    }
-
-    socket.emit('draw:pixel', { x, y, color, size, lastPx });
-    lastPx = { x, y };
-}
-
-function drawTouch(e) {
+function getTouchPos(e) {
     const touch = e.touches[0];
     const rect = drawCanvas.getBoundingClientRect();
-    const x = Math.max(0, Math.min(canvasSize - 1, Math.floor((touch.clientX - rect.left) / pixelSize)));
-    const y = Math.max(0, Math.min(canvasSize - 1, Math.floor((touch.clientY - rect.top) / pixelSize)));
-    const color = isEraser ? '#ffffff' : drawColor;
-    const size = brushSize;
-
-    for (let dy = 0; dy < size; dy++) {
-        for (let dx = 0; dx < size; dx++) {
-            const px = x + dx - Math.floor(size / 2);
-            const py = y + dy - Math.floor(size / 2);
-            if (px >= 0 && px < canvasSize && py >= 0 && py < canvasSize) {
-                drawCtx.fillStyle = color;
-                drawCtx.fillRect(px * pixelSize, py * pixelSize, pixelSize, pixelSize);
-            }
-        }
-    }
-
-    if (lastPx) {
-        bresenham(lastPx.x, lastPx.y, x, y, (bx, by) => {
-            for (let dy = 0; dy < size; dy++) {
-                for (let dx = 0; dx < size; dx++) {
-                    const px = bx + dx - Math.floor(size / 2);
-                    const py = by + dy - Math.floor(size / 2);
-                    if (px >= 0 && px < canvasSize && py >= 0 && py < canvasSize) {
-                        drawCtx.fillStyle = color;
-                        drawCtx.fillRect(px * pixelSize, py * pixelSize, pixelSize, pixelSize);
-                    }
-                }
-            }
-        });
-    }
-
-    socket.emit('draw:pixel', { x, y, color, size, lastPx });
-    lastPx = { x, y };
+    const scaleX = drawCanvas.width / rect.width;
+    const scaleY = drawCanvas.height / rect.height;
+    return { x: (touch.clientX - rect.left) * scaleX, y: (touch.clientY - rect.top) * scaleY };
 }
 
-function onRemotePixel(data) {
-    const { x, y, color, size, lastPx: lp } = data;
-    drawCtx.fillStyle = color;
-    for (let dy = 0; dy < size; dy++) {
-        for (let dx = 0; dx < size; dx++) {
-            const px = x + dx - Math.floor(size / 2);
-            const py = y + dy - Math.floor(size / 2);
-            if (px >= 0 && px < canvasSize && py >= 0 && py < canvasSize) {
-                drawCtx.fillRect(px * pixelSize, py * pixelSize, pixelSize, pixelSize);
-            }
-        }
-    }
-    if (lp) {
-        bresenham(lp.x, lp.y, x, y, (bx, by) => {
-            for (let dy = 0; dy < size; dy++) {
-                for (let dx = 0; dx < size; dx++) {
-                    const px = bx + dx - Math.floor(size / 2);
-                    const py = by + dy - Math.floor(size / 2);
-                    if (px >= 0 && px < canvasSize && py >= 0 && py < canvasSize) {
-                        drawCtx.fillRect(px * pixelSize, py * pixelSize, pixelSize, pixelSize);
-                    }
-                }
-            }
-        });
+function onRemoteStroke(data) {
+    if (data.x0 === data.x1 && data.y0 === data.y1) {
+        drawDot(data.x0, data.y0, data.color, data.size, data.erase);
+    } else {
+        drawStroke(data.x0, data.y0, data.x1, data.y1, data.color, data.size, data.erase);
     }
 }
 
-function onRemoteLine(data) {
-    const { x0, y0, x1, y1, color, size } = data;
-    drawCtx.fillStyle = color;
-    bresenham(x0, y0, x1, y1, (bx, by) => {
-        for (let dy = 0; dy < size; dy++) {
-            for (let dx = 0; dx < size; dx++) {
-                const px = bx + dx - Math.floor(size / 2);
-                const py = by + dy - Math.floor(size / 2);
-                if (px >= 0 && px < canvasSize && py >= 0 && py < canvasSize) {
-                    drawCtx.fillRect(px * pixelSize, py * pixelSize, pixelSize, pixelSize);
-                }
-            }
-        }
-    });
-}
-
-function bresenham(x0, y0, x1, y1, cb) {
-    const dx = Math.abs(x1 - x0), dy = Math.abs(y1 - y0);
-    const sx = x0 < x1 ? 1 : -1, sy = y0 < y1 ? 1 : -1;
-    let err = dx - dy;
-    while (true) {
-        cb(x0, y0);
-        if (x0 === x1 && y0 === y1) break;
-        const e2 = 2 * err;
-        if (e2 > -dy) { err -= dy; x0 += sx; }
-        if (e2 < dx) { err += dx; y0 += sy; }
-    }
-}
-
-/* ===========================================
-   DRAW TOOLS
-   =========================================== */
+/* ===== DRAW TOOLS ===== */
 function setBrush(size, btn) {
     brushSize = size;
     isEraser = false;
@@ -892,11 +535,7 @@ function setBrush(size, btn) {
     document.querySelectorAll('[data-brush]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
 }
-
-function toggleEraser() {
-    isEraser = !isEraser;
-    document.getElementById('eraserBtn')?.classList.toggle('active', isEraser);
-}
+function toggleEraser() { isEraser = !isEraser; document.getElementById('eraserBtn')?.classList.toggle('active', isEraser); }
 
 function setupColorPopup() {
     const popup = document.getElementById('colorPopup');
@@ -908,30 +547,14 @@ function setupColorPopup() {
         const sw = document.createElement('div');
         sw.className = 'sw';
         sw.style.background = c;
-        sw.onclick = () => {
-            drawColor = c;
-            isEraser = false;
-            document.getElementById('colorBtn').style.background = c;
-            document.getElementById('eraserBtn')?.classList.remove('active');
-            popup.classList.remove('show');
-        };
+        sw.onclick = () => { drawColor = c; isEraser = false; document.getElementById('colorBtn').style.background = c; document.getElementById('eraserBtn')?.classList.remove('active'); popup.classList.remove('show'); };
         grid.appendChild(sw);
     });
     popup.appendChild(grid);
 }
+function toggleColors(e) { e.stopPropagation(); document.getElementById('colorPopup')?.classList.toggle('show'); }
+document.addEventListener('click', () => document.getElementById('colorPopup')?.classList.remove('show'));
 
-function toggleColors(e) {
-    e.stopPropagation();
-    document.getElementById('colorPopup')?.classList.toggle('show');
-}
-
-document.addEventListener('click', () => {
-    document.getElementById('colorPopup')?.classList.remove('show');
-});
-
-/* ===========================================
-   INIT
-   =========================================== */
 connect();
 </script>
 </body>
